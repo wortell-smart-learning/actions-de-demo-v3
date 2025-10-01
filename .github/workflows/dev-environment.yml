@@ -28,12 +28,7 @@ jobs:
         uses: hashicorp/setup-terraform@v2
 
       - name: Terraform Init
-        run: terraform init \
-          -backend-config="resource_group_name=tfbackend" \
-          -backend-config="storage_account_name=tfbackendstorewortell" \
-          -backend-config="container_name=tfstate" \
-          -backend-config="key=${{ github.ref_name }}.terraform.tfstate" \
-          -backend-config="use_oidc=true"
+        run: terraform init -backend-config="resource_group_name=tfbackend" -backend-config="storage_account_name=tfbackendstorewortell" -backend-config="container_name=tfstate" -backend-config="key=${{ github.ref_name }}.terraform.tfstate" -backend-config="use_oidc=true"
         working-directory: ./terraform
 
       - name: Terraform Plan
