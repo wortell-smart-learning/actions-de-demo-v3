@@ -15,7 +15,7 @@ resource "azurerm_data_factory" "adf_dev" {
     branch_name     = var.adf_git_branch
     git_url         = "https://github.com"
     repository_name = "actions-de-demo-v3"
-    root_folder     = "/"
+    root_folder     = "/src/adf"
   }
 }
 
