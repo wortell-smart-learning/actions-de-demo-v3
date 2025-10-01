@@ -3,6 +3,10 @@ name: Dev Environment
 on:
   create
 
+permissions:
+  contents: read
+  id-token: write # For OIDC to Azure
+
 jobs:
   create_dev_environment:
     if: startsWith(github.ref, 'refs/heads/dev')
