@@ -4,6 +4,12 @@ on:
   pull_request:
     branches:
       - main
+  push:
+    branches:
+      - main
+      - dev
+    paths:
+      - 'src/adf/**'
 
 jobs:
   build-and-test:
@@ -37,7 +43,7 @@ jobs:
       - name: (Optional) Validate ADF
         uses: Azure/data-factory-validate-action@v1.0.0
         with:
-          path: adf
+          path: src/adf
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
@@ -49,3 +55,22 @@ jobs:
       - name: Terraform Validate
         run: terraform validate
         working-directory: ./terraform
+
+      - name: Set up Node.js
+        if: github.event_name == 'push'
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18.x'
+
+      - name: Build ADF Artifact
+        if: github.event_name == 'push'
+        run: |
+          npm install -g @microsoft/azure-data-factory-utilities
+          npm exec -- adf-publish src/adf --output-path adf-output
+
+      - name: Upload ADF Artifact
+        if: github.event_name == 'push'
+        uses: actions/upload-artifact@v4
+        with:
+          name: adf-arm-template
+          path: adf-output
