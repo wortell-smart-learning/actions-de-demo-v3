@@ -1,7 +1,13 @@
 name: Dev Environment
 
 on:
-  create
+  push:
+    branches:
+      - main
+      - dev
+    paths:
+      - 'terraform/**'
+      - '.github/workflows/dev-environment.yml'
 
 permissions:
   contents: read
