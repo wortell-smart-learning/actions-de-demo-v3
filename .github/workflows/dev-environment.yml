@@ -5,10 +5,10 @@ on:
 
 jobs:
   create_dev_environment:
-    if: startsWith(github.ref, 'refs/heads/dev') || startsWith(github.ref, 'refs/heads/feature/')
+    if: startsWith(github.ref, 'refs/heads/dev')
     runs-on: ubuntu-latest
     environment:
-      name: dev-${{ github.ref_name }}
+      name: dev
       url: 'https://github.com' # Placeholder
     steps:
       - name: Checkout code
@@ -37,7 +37,7 @@ jobs:
         env:
           TF_VAR_resource_group_name: ${{ vars.RESOURCE_GROUP }}
           TF_VAR_location: ${{ vars.LOCATION }}
-          TF_VAR_adf_git_branch: main
+          TF_VAR_adf_git_branch: dev
 
       - name: Terraform Apply
         run: terraform apply -auto-approve tfplan
