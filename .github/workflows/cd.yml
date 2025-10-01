@@ -37,7 +37,7 @@ jobs:
 
       - name: Terraform Init
         run: terraform init \
-          -backend-config="resource_group_name=tfbackend" \
+          -backend-config="resource_group_name=continuous-training" \
           -backend-config="storage_account_name=tfbackendstorewortell" \
           -backend-config="container_name=tfstate" \
           -backend-config="key=staging.terraform.tfstate"
