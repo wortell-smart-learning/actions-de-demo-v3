@@ -1,17 +1,19 @@
-name: CD
+name: IAC
 
 on:
   push:
     branches:
       - main
-  
+    paths:
+      - 'terraform/**'
+      - '.github/workflows/iac.yml'
 
 permissions:
   contents: read
   id-token: write # For OIDC to Azure
 
 concurrency:
-  group: cd-${{ github.ref }}
+  group: iac-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
