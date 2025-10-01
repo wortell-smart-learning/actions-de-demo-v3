@@ -10,9 +10,15 @@ on:
       - dev
     paths:
       - 'src/adf/**'
+      - '.github/workflows/ci.yml'
+  workflow_run:
+    workflows: ["IAC"]
+    types:
+      - completed
 
 jobs:
   build-and-test:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
