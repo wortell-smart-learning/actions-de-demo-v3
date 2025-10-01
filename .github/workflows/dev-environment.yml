@@ -34,11 +34,11 @@ jobs:
       - name: Terraform Plan
         run: terraform plan -out=tfplan
         working-directory: ./terraform
+        env:
+          TF_VAR_resource_group_name: ${{ vars.RESOURCE_GROUP }}
+          TF_VAR_location: ${{ vars.LOCATION }}
+          TF_VAR_adf_git_branch: main
 
       - name: Terraform Apply
         run: terraform apply -auto-approve tfplan
         working-directory: ./terraform
-        env:
-          TF_VAR_resource_group_name: ${{ vars.RESOURCE_GROUP }}
-          TF_VAR_location: ${{ vars.LOCATION }}
-          TF_VAR_adf_git_branch: ${{ github.ref_name }}
