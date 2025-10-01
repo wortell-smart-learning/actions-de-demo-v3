@@ -36,8 +36,14 @@ jobs:
         uses: hashicorp/setup-terraform@v2
 
       - name: Terraform Init
-        run: terraform init
+        run: terraform init \
+          -backend-config="resource_group_name=tfbackend" \
+          -backend-config="storage_account_name=tfbackendstorewortell" \
+          -backend-config="container_name=tfstate" \
+          -backend-config="key=staging.terraform.tfstate"
         working-directory: ./terraform
+        env:
+          ARM_ACCESS_KEY: ${{ secrets.TF_BACKEND_ACCESS_KEY }}
 
       - name: Terraform Plan
         run: terraform plan -out=tfplan
@@ -100,8 +106,14 @@ jobs:
         uses: hashicorp/setup-terraform@v2
 
       - name: Terraform Init
-        run: terraform init
+        run: terraform init \
+          -backend-config="resource_group_name=tfbackend" \
+          -backend-config="storage_account_name=tfbackendstorewortell" \
+          -backend-config="container_name=tfstate" \
+          -backend-config="key=production.terraform.tfstate"
         working-directory: ./terraform
+        env:
+          ARM_ACCESS_KEY: ${{ secrets.TF_BACKEND_ACCESS_KEY }}
 
       - name: Terraform Plan
         run: terraform plan -out=tfplan
