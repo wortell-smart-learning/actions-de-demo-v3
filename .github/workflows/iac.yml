@@ -53,37 +53,8 @@ jobs:
         run: terraform apply -auto-approve tfplan
         working-directory: ./terraform
 
-
-      # - name: Apply SQL Schema
-      #   run: |
-      #     echo "This step would run sql/01_schema.sql and 02_post_deploy.sql"
-      #     # sqlcmd -S ${{ secrets.SQL_SERVER }} -d ${{ secrets.SQL_DB }} -U ${{ secrets.SQL_USER }} -P ${{ secrets.SQL_PASSWORD }} -i sql/01_schema.sql
-
-  run_etl_staging:
-    needs: deploy_staging
-    runs-on: ubuntu-latest
-    environment: staging
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Run ETL or Databricks Job
-        run: |
-          echo "This step would trigger the Databricks notebook or run the Python ETL script."
-          # databricks jobs run-now --job-id <JOB_ID>
-
-  run_dq_checks_staging:
-    needs: run_etl_staging
-    runs-on: ubuntu-latest
-    environment: staging
-    steps:
-      - name: Run Great Expectations Checkpoint
-        run: |
-          echo "This step would run the GX checkpoint against the loaded data."
-          # great_expectations checkpoint run sales_production
-
   deploy_prod:
-    needs: run_dq_checks_staging
+    needs: deploy_staging
     runs-on: ubuntu-latest
     environment:
       name: production
