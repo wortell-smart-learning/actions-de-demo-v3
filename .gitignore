@@ -36,3 +36,16 @@ data/
 # OS
 .DS_Store
 Thumbs.db
+
+# Terraform
+.terraform/
+.terraform.tfstate.lock.info
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+*.tfplan
+
+# Often contain secrets; commit only sanitized samples
+*.tfvars
+*.tfvars.json
