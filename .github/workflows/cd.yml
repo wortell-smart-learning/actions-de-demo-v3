@@ -25,7 +25,7 @@ jobs:
     if: (github.event_name == 'workflow_run' && github.event.workflow.name == 'Dev Environment IaC') || startsWith(github.ref, 'refs/heads/dev/')
     runs-on: ubuntu-latest
     environment:
-      name: dev-${{ github.ref_name }}
+      name: dev
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
