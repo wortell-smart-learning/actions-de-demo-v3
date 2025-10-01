@@ -9,3 +9,9 @@ variable "location" {
   description = "The Azure region where resources will be created."
   default     = "westeurope"
 }
+
+variable "adf_git_branch" {
+  type        = string
+  description = "The git branch for ADF."
+  default     = "main"
+}

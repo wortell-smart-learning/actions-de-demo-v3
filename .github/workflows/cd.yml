@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+  
 
 permissions:
   contents: read
@@ -48,6 +49,7 @@ jobs:
         env:
           TF_VAR_resource_group_name: ${{ vars.RESOURCE_GROUP }}
           TF_VAR_location: ${{ vars.LOCATION }}
+          TF_VAR_adf_git_branch: main
 
       # - name: Apply SQL Schema
       #   run: |
@@ -111,4 +113,4 @@ jobs:
         env:
           TF_VAR_resource_group_name: ${{ vars.RESOURCE_GROUP }}
           TF_VAR_location: ${{ vars.LOCATION }}
-
+          TF_VAR_adf_git_branch: main
