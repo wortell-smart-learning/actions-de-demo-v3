@@ -51,17 +51,6 @@ jobs:
         with:
           path: src/adf
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
-
-      - name: Terraform Init
-        run: terraform init
-        working-directory: ./terraform
-
-      - name: Terraform Validate
-        run: terraform validate
-        working-directory: ./terraform
-
       - name: Set up Node.js
         if: github.event_name == 'push'
         uses: actions/setup-node@v4
