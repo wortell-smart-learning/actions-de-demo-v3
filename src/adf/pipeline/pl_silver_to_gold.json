@@ -1,5 +1,5 @@
 {
-	"name": "silver_to_gold_pipeline",
+	"name": "pl_silver_to_gold",
 	"properties": {
 		"activities": [
 			{
