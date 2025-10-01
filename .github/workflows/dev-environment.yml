@@ -15,7 +15,6 @@ permissions:
 
 jobs:
   create_dev_environment:
-    if: startsWith(github.ref, 'refs/heads/dev')
     runs-on: ubuntu-latest
     environment:
       name: dev
