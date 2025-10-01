@@ -8,6 +8,13 @@ resource "azurerm_mssql_server" "sql_server" {
   tags                         = {}
 }
 
+resource "azurerm_mssql_firewall_rule" "allow_azure" {
+  name             = "AllowAllWindowsAzureIps"
+  server_id        = azurerm_mssql_server.sql_server.id
+  start_ip_address = "0.0.0.0"
+  end_ip_address   = "0.0.0.0"
+}
+
 resource "azurerm_mssql_database" "sql_db" {
   name                = "sqldb-${var.resource_group_name}"
   server_id           = azurerm_mssql_server.sql_server.id
