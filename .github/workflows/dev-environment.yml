@@ -11,7 +11,7 @@ on:
 
 permissions:
   contents: read
-  id-token: write # For OIDC to Azure
+  id-token: write
 
 jobs:
   create_dev_environment:
@@ -19,7 +19,6 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: dev
-      url: 'https://github.com' # Placeholder
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
