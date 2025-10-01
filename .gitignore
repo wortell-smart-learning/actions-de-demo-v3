@@ -1,0 +1,38 @@
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+pip-wheel-metadata/
+.eggs/
+*.egg-info/
+dist/
+build/
+
+# Great Expectations
+data_quality/uncommitted/
+
+# Data
+data/
+!data/sample/
+!data/sample/.placeholder
+
+# Notebooks
+.ipynb_checkpoints/
+
+# Terraform / Bicep
+.terraform/
+*.tfstate
+*.tfstate.*
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db

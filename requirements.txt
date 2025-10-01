@@ -1,0 +1,6 @@
+pandas
+pyodbc
+great_expectations
+pytest
+faker
+pyarrow

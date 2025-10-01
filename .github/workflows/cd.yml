@@ -1,0 +1,114 @@
+name: CD
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  id-token: write # For OIDC to Azure
+
+concurrency:
+  group: cd-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deploy_staging:
+    runs-on: ubuntu-latest
+    environment:
+      name: staging
+      url: 'https://github.com' # Placeholder
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Log in to Azure
+        uses: azure/login@v2
+        with:
+          # This requires OIDC to be configured between GitHub and Azure
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+
+      - name: Terraform Init
+        run: terraform init
+        working-directory: ./terraform
+
+      - name: Terraform Plan
+        run: terraform plan -out=tfplan
+        working-directory: ./terraform
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve tfplan
+        working-directory: ./terraform
+        env:
+          TF_VAR_resource_group_name: ${{ vars.RESOURCE_GROUP }}
+          TF_VAR_location: ${{ vars.LOCATION }}
+
+      # - name: Apply SQL Schema
+      #   run: |
+      #     echo "This step would run sql/01_schema.sql and 02_post_deploy.sql"
+      #     # sqlcmd -S ${{ secrets.SQL_SERVER }} -d ${{ secrets.SQL_DB }} -U ${{ secrets.SQL_USER }} -P ${{ secrets.SQL_PASSWORD }} -i sql/01_schema.sql
+
+  run_etl_staging:
+    needs: deploy_staging
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run ETL or Databricks Job
+        run: |
+          echo "This step would trigger the Databricks notebook or run the Python ETL script."
+          # databricks jobs run-now --job-id <JOB_ID>
+
+  run_dq_checks_staging:
+    needs: run_etl_staging
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - name: Run Great Expectations Checkpoint
+        run: |
+          echo "This step would run the GX checkpoint against the loaded data."
+          # great_expectations checkpoint run sales_production
+
+  deploy_prod:
+    needs: run_dq_checks_staging
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: 'https://github.com' # Placeholder
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Log in to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+
+      - name: Terraform Init
+        run: terraform init
+        working-directory: ./terraform
+
+      - name: Terraform Plan
+        run: terraform plan -out=tfplan
+        working-directory: ./terraform
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve tfplan
+        working-directory: ./terraform
+        env:
+          TF_VAR_resource_group_name: ${{ vars.RESOURCE_GROUP }}
+          TF_VAR_location: ${{ vars.LOCATION }}
+

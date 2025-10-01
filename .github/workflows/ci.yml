@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+
+      - name: Install dependencies
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+          pip install -r requirements.txt
+
+      - name: Lint with pytest (as a placeholder for a real linter)
+        run: |
+          source venv/bin/activate
+          pytest --version # Using pytest to check installation
+
+      - name: Run Great Expectations Checkpoint
+        run: |
+          echo "This step would run GX against sample data."
+          # In a real CI, you would configure a datasource and run:
+          # great_expectations checkpoint run sales
+
+      - name: (Optional) Validate ADF
+        uses: Azure/data-factory-validate-action@v1.0.0
+        with:
+          path: adf
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+
+      - name: Terraform Init
+        run: terraform init
+        working-directory: ./terraform
+
+      - name: Terraform Validate
+        run: terraform validate
+        working-directory: ./terraform
