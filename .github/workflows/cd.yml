@@ -40,10 +40,9 @@ jobs:
           -backend-config="resource_group_name=continuous-training" \
           -backend-config="storage_account_name=tfbackendstorewortell" \
           -backend-config="container_name=tfstate" \
-          -backend-config="key=staging.terraform.tfstate"
+          -backend-config="key=staging.terraform.tfstate" \
+          -backend-config="use_oidc=true"
         working-directory: ./terraform
-        env:
-          ARM_ACCESS_KEY: ${{ secrets.TF_BACKEND_ACCESS_KEY }}
 
       - name: Terraform Plan
         run: terraform plan -out=tfplan
@@ -110,10 +109,9 @@ jobs:
           -backend-config="resource_group_name=tfbackend" \
           -backend-config="storage_account_name=tfbackendstorewortell" \
           -backend-config="container_name=tfstate" \
-          -backend-config="key=production.terraform.tfstate"
+          -backend-config="key=production.terraform.tfstate" \
+          -backend-config="use_oidc=true"
         working-directory: ./terraform
-        env:
-          ARM_ACCESS_KEY: ${{ secrets.TF_BACKEND_ACCESS_KEY }}
 
       - name: Terraform Plan
         run: terraform plan -out=tfplan

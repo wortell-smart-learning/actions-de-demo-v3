@@ -32,10 +32,9 @@ jobs:
           -backend-config="resource_group_name=tfbackend" \
           -backend-config="storage_account_name=tfbackendstorewortell" \
           -backend-config="container_name=tfstate" \
-          -backend-config="key=${{ github.ref_name }}.terraform.tfstate"
+          -backend-config="key=${{ github.ref_name }}.terraform.tfstate" \
+          -backend-config="use_oidc=true"
         working-directory: ./terraform
-        env:
-          ARM_ACCESS_KEY: ${{ secrets.TF_BACKEND_ACCESS_KEY }}
 
       - name: Terraform Plan
         run: terraform plan -out=tfplan
